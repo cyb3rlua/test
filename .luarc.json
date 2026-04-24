@@ -1,0 +1,8 @@
+{
+	"workspace": {
+		"library": [
+			"$HOME/.local/share/lux"
+		],
+		"checkThirdParty": false
+	}
+}
