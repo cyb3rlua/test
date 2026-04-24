@@ -1,5 +1,4 @@
 ---@type LuxManifest
-
 return {
 
 	name = "test",
