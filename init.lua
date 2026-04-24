@@ -1,4 +1,3 @@
--- init.lua
 ---@class Test
 ---@field func function
 ---@field cleanup function?
@@ -37,8 +36,27 @@ M.assert_false = function(val, msg)
 	M.assert_eq(val, false, msg)
 end
 
+
 M.assert_true = function(val, msg)
 	M.assert_eq(val, true, msg)
+end
+
+M["assert_false!"] = function(val, msg)
+	assert(not val,
+		string.format(
+			"%s\nExpected: falsy\nGot:\t%s",
+			msg or "assertion failed",
+			tostring(val)
+		))
+end
+
+M["assert_true!"] = function(val, msg)
+	assert(val,
+		string.format(
+			"%s\nExpected: truthy\nGot:\t%s",
+			msg or "assertion failed",
+			tostring(val)
+		))
 end
 
 ---@param name string # The name of the test as a string
