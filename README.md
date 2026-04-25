@@ -66,7 +66,9 @@ lua tests.lua "my test"
 
 ### `t.register(name, test)` / `t.add_test(name, test)`
 
-Registers a test. `test.func` is required and must be a function. `test.cleanup` is optional and will be called after the test regardless of whether it passed or failed — useful for teardown.
+Registers a test. `test.func` is required and must be a function. `test.cleanup` is optional — if provided, it will be called after the test regardless of whether it passed or failed, useful for teardown and restoring state.
+
+If cleanup itself fails, `test_all` will halt execution to prevent corrupted state from contaminating subsequent tests.
 
 ```lua
 t.register("example", {
@@ -77,7 +79,7 @@ t.register("example", {
 
 ### `t.test_all()`
 
-Runs all registered tests and prints a summary.
+Runs all registered tests and prints a summary. Halts if a cleanup function fails.
 
 ### `t.run_test(name)`
 
@@ -89,10 +91,15 @@ Runs a single test by name.
 |---|---|
 | `t.assert_eq(actual, expected, msg?)` | Fails if `actual ~= expected` |
 | `t.assert_neq(actual, expected, msg?)` | Fails if `actual == expected` |
-| `t.assert_true(val, msg?)` | Fails if `val ~= true` |
-| `t.assert_false(val, msg?)` | Fails if `val ~= false` |
+| `t.assert_true(val, msg?)` | Fails if `val` is falsy |
+| `t.assert_false(val, msg?)` | Fails if `val` is truthy |
+| `t.assert_is_true(val, msg?)` | Fails if `val ~= true` (strict boolean) |
+| `t.assert_is_false(val, msg?)` | Fails if `val ~= false` (strict boolean) |
+| `t.assert_dpeq(actual, expected, msg?)` | Fails if tables are not deeply equal |
 
-Note that `assert_true` and `assert_false` check for strict boolean equality, not truthiness.
+`assert_true`/`assert_false` check truthiness. Use `assert_is_true`/`assert_is_false` when you need strict boolean equality.
+
+`assert_dpeq` recursively compares tables by value, and pretty-prints both sides on failure.
 
 ## License
 
