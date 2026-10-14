@@ -1,6 +1,8 @@
 ---@class Test
 ---@field func function
 ---@field cleanup function?
+---
+---@alias TestList table<string, Test>
 
 local M = {}
 
@@ -90,6 +92,7 @@ dcmp = function(a, b)
 	if a == b then return true end
 	if type(a) ~= "table" or type(b) ~= "table" then return false end
 
+	-- potentially infinite recursion with self-referencing tables
 	for k, v in pairs(a) do
 		if not dcmp(v, b[k]) then return false end
 	end
@@ -100,6 +103,7 @@ dcmp = function(a, b)
 
 	return true
 end
+
 local function inspect(t, indent)
 	indent = indent or 0
 	local pad = string.rep("\t", indent)
